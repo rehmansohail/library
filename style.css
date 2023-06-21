@@ -36,7 +36,7 @@ header {
 
 main {
     flex: 1;
-    background-color: dimgray;
+    background-color: lightsalmon;
     padding: 20px;
     display: flex;
     flex-direction: column;

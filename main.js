@@ -10,8 +10,30 @@ function Book(title, author, pages, read) {
 function addBookToLibrary() {
   const title = prompt("Enter the title of the book:");
   const author = prompt("Enter the author of the book:");
-  const pages = prompt("Enter the number of pages:");
-  const read = confirm("Has the book been read?");
+
+  let pages;
+  while (true) {
+    const pagesInput = prompt("Enter the number of pages:");
+    if (!isNaN(pagesInput) && pagesInput.trim() !== '') {
+      pages = parseInt(pagesInput);
+      break;
+    } else {
+      alert("Invalid input. Please enter a valid number of pages.");
+    }
+  }
+  let read;
+  while (true) {
+    const readInput = prompt("Has the book been read? (Enter 'Yes' or 'No')").toLowerCase();
+    if (readInput === 'yes') {
+      read = true;
+      break;
+    } else if (readInput === 'no') {
+      read = false;
+      break;
+    } else {
+      alert("Invalid input. Please enter 'Yes' or 'No'.");
+    }
+  }
 
   const check = myLibrary.find(book=>book.title==title && book.author==author)
   if(check){
