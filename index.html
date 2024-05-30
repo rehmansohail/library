@@ -8,7 +8,7 @@
     <link rel="icon" href="./favicon.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
-<body>
+<body >
     <header>
 
   <div class="bg-dark collapse" id="navbarHeader" style="">
@@ -50,27 +50,27 @@
     <section class="py-4 text-center container">
         <div class="col-lg-6 col-md-8 mx-auto">
              
-            <a href="#" class="btn btn-primary my-2 btn-lg" data-toggle="collapse" data-target="#bookForm" aria-controls="bookForm" aria-expanded="false" aria-label="Toggle navigation">Add Book</a>
-            <a href="#" class="btn btn-secondary my-2 btn-lg" data-toggle="collapse" data-target="#bugForm" aria-controls="bugForm" aria-expanded="false" aria-label="Toggle navigation">Report a bug</a>
+            <a href="#/" class="btn btn-primary my-2 btn-lg" data-toggle="collapse" data-target="#bookForm" aria-controls="bookForm" aria-expanded="false" aria-label="Toggle navigation">Add Book</a>
+            <a href="#/" class="btn btn-secondary my-2 btn-lg" data-toggle="collapse" data-target="#bugForm" aria-controls="bugForm" aria-expanded="false" aria-label="Toggle navigation">Report a bug</a>
           </div>
     </section>
 
     <div class="m-5 collapse" id="bookForm">
-        <form>
+        <form id="form1">
             <div class="form-row">
               <div class="form-group col-md-6">
                 <label for="inputTitle">Title</label>
-                <input type="text" class="form-control" id="inputTitle" placeholder="Title of the Book">
+                <input type="text" class="form-control" id="inputTitle" placeholder="Title of the Book" required>
               </div>
               <div class="form-group col-md-6">
                 <label for="inputAuthor">Author</label>
-                <input type="text" class="form-control" id="inputAuthor" placeholder="Author of the Book">
+                <input type="text" class="form-control" id="inputAuthor" placeholder="Author of the Book" required>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-2">
                 <label for="inputPages">Number of Pages</label>
-                <input type="number" class="form-control" id="inputPages">
+                <input type="number" class="form-control" id="inputPages" required>
               </div>
             </div>
             <div class="form-group">
@@ -104,71 +104,17 @@
     <div class="album py-5 bg-light">
         <div class="container">
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3" id="cardContainer">
-            <div class="col">
-                <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
-                    <div class="card-header"><h4>A Game of Thrones</h4></div>
-                    <div class="card-body">
-                      <h5 class="card-title">George R.R. Martin</h5>
-                      <p class="card-text">567 pages</p>
-                      <div>
-                          <a href="#" class="btn btn-danger">Delete</a>
-                          <a href="#" class="btn btn-danger">Read</a>
-                      </div>
-                    </div>
-                  </div>
-            </div>
+            
 
             <div class="col">
                 <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
                     <div class="card-header"><h4>A Game of Thrones</h4></div>
                     <div class="card-body">
                       <h5 class="card-title">George R.R. Martin</h5>
-                      <p class="card-text">567 pages</p>
-                      <div>
-                          <a href="#" class="btn btn-danger">Delete</a>
-                          <a href="#" class="btn btn-danger">Read</a>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-
-            <div class="col">
-                <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
-                    <div class="card-header"><h4>A Game of Thrones</h4></div>
-                    <div class="card-body">
-                      <h5 class="card-title">George R.R. Martin</h5>
-                      <p class="card-text">567 pages</p>
-                      <div>
-                          <a href="#" class="btn btn-danger">Delete</a>
-                          <a href="#" class="btn btn-danger">Read</a>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-
-            <div class="col">
-                <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
-                    <div class="card-header"><h4>A Game of Thrones</h4></div>
-                    <div class="card-body">
-                      <h5 class="card-title">George R.R. Martin</h5>
-                      <p class="card-text">567 pages</p>
-                      <div>
-                          <a href="#" class="btn btn-danger">Delete</a>
-                          <a href="#" class="btn btn-danger">Read</a>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-
-            <div class="col">
-                <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
-                    <div class="card-header"><h4>A Game of Thrones</h4></div>
-                    <div class="card-body">
-                      <h5 class="card-title">George R.R. Martin</h5>
-                      <p class="card-text">567 pages</p>
-                      <div>
-                          <a href="#" class="btn btn-danger">Delete</a>
-                          <a href="#" class="btn btn-danger">Read</a>
+                      <p class="card-text">694 pages</p>
+                      <div id="buttons">
+                          <a href="#/" class="btn btn-danger" style="margin-right: 2px;">Delete</a>
+                          <a href="#/" class="btn btn-danger read">Read</a>
                       </div>
                     </div>
                   </div>
