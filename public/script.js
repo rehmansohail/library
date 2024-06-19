@@ -93,3 +93,15 @@ document.addEventListener('click',(e)=>{
         e.preventDefault();
     }
 })
+
+//prevent default behaviour in search bar
+
+document.addEventListener('DOMContentLoaded', () => {
+    const searchBar = document.getElementById('searchInput');
+
+    searchBar.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+});

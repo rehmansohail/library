@@ -3,7 +3,7 @@
     <main>
 
 
-    <form class="w-100" action="/search" method="get">
+    <form class="w-100">
         <input type="search" id="searchInput" class="form-control" placeholder="Enter the book name" aria-label="Search">
         <div class="dropdown mt-2">
           <ul id="dropdownList"></ul>
@@ -15,23 +15,24 @@
         <div class="container">
           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3" id="cardContainer">
             
-
-            <div class="col">
-                <div class="card text-light bg-dark mb-3" style="max-width: 18rem;">
-                    <div class="card-header"><h4>A Game of Thrones</h4></div>
-                    <div class="card-body">
-                      <h5 class="card-title">George R.R. Martin</h5>
-                      <p class="card-text">694 pages</p>
-                      <div id="buttons">
-                          <a href="#/" class="btn btn-danger" style="margin-right: 2px;">Delete</a>
-                          <a href="#/" class="btn btn-danger read">Read</a>
-                      </div>
-                    </div>
+            <% if (locals.items) { %>
+              <% items.forEach(item => { %>
+                <div class="card m-4">
+                  <img src="https://covers.openlibrary.org/b/id/<%= item.key %>-L.jpg" alt="Image" height="80%">
+                  <div class="card-description">
+                    <p><%= item.description %></p>
                   </div>
-            </div>
-
-
-          </div>
+                  <div class="card-rating">
+                    <p>Rating: <%= item.rating %></p>
+                  </div>
+                  <form action="/delete" method="get" class="form-group submit-container">
+                    <input type="hidden" id="key" name="key" value="<%= item.key %>">
+                    <button type="submit" class="btn btn-primary">Delete</button>
+                </form>
+                </div>
+                <% })}else{ %>
+                  <h1>No books added yet</h1>
+                <% } %>
         </div>
       </div>
     
