@@ -5,7 +5,7 @@ import fs from "fs"
 
 
 const app = express()
-const port = 3000
+const port = process.env.PORT || 4000;
 
 //used postgres on aiven.io
 const db = new pg.Client({
