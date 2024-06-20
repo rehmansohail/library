@@ -10,10 +10,24 @@
         </div>
       </form>
 
+      <div class="dropdown text-center m-2">
+          <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Sort by
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <form action="/sort" method="get">
+                  <button class="dropdown-item" type="submit" name="action" value="button1">Rating (High to Low)</button>
+                  <button class="dropdown-item" type="submit" name="action" value="button2">Rating (Low to High)</button>
+                  <button class="dropdown-item" type="submit" name="action" value="button3">Date (New to Old)</button>
+                  <button class="dropdown-item" type="submit" name="action" value="button4">Date (Old to New)</button>
+              </form>
+          </div>
+      </div>
+
 
     <div class="album py-5 bg-light">
         <div class="container">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3" id="cardContainer">
+          <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-3" id="cardContainer">
             
             <% if (locals.items) { %>
               <% items.forEach(item => { %>
@@ -23,7 +37,7 @@
                     <p><%= item.description %></p>
                   </div>
                   <div class="card-rating">
-                    <p>Rating: <%= item.rating %></p>
+                    <p>Rating: <%= item.rating %>⭐</p>
                   </div>
                   <form action="/delete" method="get" class="form-group submit-container">
                     <input type="hidden" id="key" name="key" value="<%= item.key %>">

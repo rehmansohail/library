@@ -46,7 +46,9 @@ app.get("/book", async (req,res)=>{
 app.post("/add",async (req,res)=>{
   // console.log(req.body)
   let result = await db.query(`SELECT * FROM books WHERE key=${coverId}`)
-  if(result.rows.length==0)await db.query(`INSERT INTO books(key,description,rating) VALUES (${coverId},'${req.body.description}',${req.body.rating})`)
+  if(result.rows.length==0){
+    await db.query("INSERT INTO books(key, description, rating) VALUES ($1, $2, $3)",[coverId,req.body.description,req.body.rating]);
+  }
   res.redirect("/")
 })
 
@@ -54,6 +56,28 @@ app.get("/delete",async (req,res)=>{
   // console.log(req.query)
   await db.query(`DELETE FROM books WHERE key = ${req.query.key}`)
   res.redirect("/")
+})
+
+app.get("/sort", async(req,res)=>{
+  // console.log(req.query)
+  let result
+  switch(req.query.action) {
+    case "button1":
+      result = await db.query("SELECT * from books ORDER BY rating DESC")
+      break;
+    case "button2":
+      result = await db.query("SELECT * from books ORDER BY rating ASC")
+      break;
+    case "button3":
+      result = await db.query("SELECT * from books ORDER BY date DESC")
+      break;
+    case "button4":
+      result = await db.query("SELECT * from books ORDER BY date ASC")
+      break;
+  } 
+  res.render("index.ejs",{
+    items:result.rows
+  })
 })
 
 app.listen(port,()=>{
