@@ -2,18 +2,20 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg"
 import fs from "fs"
+import env from "dotenv";
 
 
 const app = express()
 const port = process.env.PORT || 4000;
+env.config()
 
 //used postgres on aiven.io
 const db = new pg.Client({
-  user:"avnadmin",
-  password:"AVNS_dAHsElgzjKBbCj-T98K",
-  host:"pg-13973974-bookmark.j.aivencloud.com",
-  port:17196,
-  database:"defaultdb",
+  user: process.env.pg_user,
+  password: process.env.pg_password,
+  host: process.env.pg_host,
+  port: process.env.pg_port,
+  database: process.env.pg_db,
   ssl: {
     rejectUnauthorized: true,
     ca: fs.readFileSync("./ca.pem").toString(),
