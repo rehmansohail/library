@@ -9,7 +9,7 @@ import GoogleStratergy from "passport-google-oauth2";
 
 
 const app = express()
-const port = 3000;
+const port = process.env.PORT || 4000;
 env.config()
 
 //used postgres on aiven.io
@@ -133,7 +133,7 @@ app.get("/sort", async(req,res)=>{
 passport.use("google", new GoogleStratergy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/google/home",
+  callbackURL: "https://library-hr83.onrender.com/auth/google/home",
   userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
 },
 async(accessToken, refreshToken,profile,cb)=>{
