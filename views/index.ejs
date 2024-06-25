@@ -35,14 +35,14 @@
             <% if (locals.items) { %>
               <% items.forEach(item => { %>
                 <div class="card m-4">
-                  <img src="https://covers.openlibrary.org/b/id/<%= item.key %>-L.jpg" alt="Image" height="80%">
-                  <div class="card-description">
+                  <img src="https://covers.openlibrary.org/b/id/<%= item.key %>-L.jpg" alt="Image" height="80%" style="border-radius: 5%;">
+                  <div class="card-description p-2 pt-4">
                     <p><%= item.description %></p>
                   </div>
-                  <div class="card-rating">
+                  <div class="card-rating p-2">
                     <p>Rating: <%= item.rating %>⭐</p>
                   </div>
-                  <form action="/delete" method="get" class="form-group submit-container">
+                  <form action="/delete" method="get" class="form-group submit-container p-2">
                     <input type="hidden" id="key" name="key" value="<%= item.key %>">
                     <button type="submit" class="btn btn-primary">Delete</button>
                 </form>
