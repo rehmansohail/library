@@ -9,7 +9,7 @@ import GoogleStratergy from "passport-google-oauth2";
 
 
 const app = express()
-const port = 3000;
+const port = process.env.port || 4000;
 env.config()
 
 //used postgres on aiven.io
