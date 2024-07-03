@@ -9,7 +9,7 @@ import GoogleStratergy from "passport-google-oauth2";
 
 
 const app = express()
-const port = process.env.port || 4000;
+const port = 3000;
 env.config()
 
 //used postgres on aiven.io
@@ -107,6 +107,31 @@ app.get("/delete",async (req,res)=>{
   await db.query(`DELETE FROM books WHERE key = $1 AND username = $2`,[req.query.key,username])
   res.redirect("/home")
 })
+
+//for the feed
+app.get("/feed",async (req,res)=>{
+  
+  let result = await db.query("SELECT key, ROUND(AVG(rating)) AS average_rating FROM books GROUP BY key;")
+    let books = result.rows
+    res.render("feed.ejs",{
+      items:books
+    })
+})
+app.get("/sortFeed", async (req,res)=>{
+  let result
+  switch(req.query.action) {
+    case "button1":
+      result = await db.query("SELECT key, ROUND(AVG(rating)) AS average_rating FROM books GROUP BY key ORDER BY average_rating DESC;")
+      break;
+    case "button2":
+      result = await db.query("SELECT key, ROUND(AVG(rating)) AS average_rating FROM books GROUP BY key ORDER BY average_rating ASC;")
+      break;
+  } 
+  res.render("feed.ejs",{
+    items:result.rows
+  })
+})
+
 
 app.get("/sort", async(req,res)=>{
   // console.log(req.query)

@@ -1,0 +1,41 @@
+<%- include("partials/header.ejs") %>
+
+<!-- buttons at the top -->
+
+<div class="text-center" style="display: flex; align-items: center; justify-content: center;" >
+    <a class="btn btn-primary m-2" href="/home" role="button">Your Collection</a>
+    <div class="dropdown text-center m-2">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sort by
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <form action="/sortFeed" method="get">
+                <button class="dropdown-item" type="submit" name="action" value="button1">Rating (High to Low)</button>
+                <button class="dropdown-item" type="submit" name="action" value="button2">Rating (Low to High)</button>
+            </form>
+        </div>
+    </div>
+    <a class="btn btn-primary m-2" href="/logout" role="button">Log Out</a>
+</div>
+
+<div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-3" id="cardContainer">
+        
+        <% if (locals.items) { %>
+          <% items.forEach(item => { %>
+            <div class="card m-4">
+              <img src="https://covers.openlibrary.org/b/id/<%= item.key %>-L.jpg" alt="Image" height="80%" style="border-radius: 5%;">
+              
+              <div class="card-rating p-2">
+                <p>Rating: <%= item.average_rating %>⭐</p>
+              </div>
+            </div>
+            <% })}else{ %>
+              <h1>No books added yet</h1>
+            <% } %>
+    </div>
+  </div>
+  </div>
+
+<%- include("partials/footer.ejs") %>
