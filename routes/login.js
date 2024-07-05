@@ -4,6 +4,7 @@ import passport from "passport";
 
 router.get("/auth/google", passport.authenticate("google", {
   scope: ["profile", "email"],
+  prompt: 'select_account'
 }));
 
 router.get("/auth/google/home", passport.authenticate("google", {
