@@ -1,16 +1,25 @@
 import express from "express";
 import bodyParser from "body-parser";
-import pg from "pg"
-import fs from "fs"
+import pg from "pg";
+import fs from "fs";
 import env from "dotenv";
 import passport from "passport";
 import session from "express-session";
-import GoogleStratergy from "passport-google-oauth2";
+import GoogleStrategy from "passport-google-oauth2";
 
+// Import routes
+import loginRoute from "./routes/login.js";
+import homeRoute from "./routes/home.js";
+import bookRoute from "./routes/book.js";
+import addRoute from "./routes/add.js";
+import deleteRoute from "./routes/delete.js";
+import feedRoute from "./routes/feed.js";
+import sortFeedRoute from "./routes/sortFeed.js";
+import sortRoute from "./routes/sort.js";
 
-const app = express()
+const app = express();
 const port = process.env.port || 4000;
-env.config()
+env.config();
 
 //used postgres on aiven.io
 const db = new pg.Client({
@@ -23,14 +32,11 @@ const db = new pg.Client({
     rejectUnauthorized: true,
     ca: fs.readFileSync("./ca.pem").toString(),
   },
-})
+});
 
-db.connect()
+db.connect();
 
-let title=''
-let author=''
-let coverId=''
-let username=''
+let username = '';
 
 app.use(
   session({
@@ -46,161 +52,63 @@ app.use(express.static("public"));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Use routes
+app.use("/", loginRoute);
+app.use("/", homeRoute);
+app.use("/", bookRoute);
+app.use("/", addRoute);
+app.use("/", deleteRoute);
+app.use("/", feedRoute);
+app.use("/", sortFeedRoute);
+app.use("/", sortRoute);
 
-app.get("/", (req,res)=>{
-    res.render("login.ejs")
-})
+let url = '';
+if (port == 3000) {
+  url = "http://localhost:3000/auth/google/home";
+} else {
+  url = "https://library-hr83.onrender.com/auth/google/home";
+}
 
-app.get("/home", async(req, res) => {
-  // console.log(req.user);
-  if (req.isAuthenticated()) {
-    let result = await db.query("SELECT * from books WHERE username =$1",[username])
-    let books = result.rows
-    // console.log(books)
-    res.render("index.ejs",{
-      items:books
-    })
-  } else {
-    res.redirect("/");
-  }
-});
-
-app.get("/auth/google",passport.authenticate("google",{
-  scope:["profile","email"],
-}))
-
-app.get("/auth/google/home", passport.authenticate("google",{
-  successRedirect:"/home",
-  failureRedirect:"/"
-}))
-
-app.get("/logout", (req, res) => {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: url,
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    async (accessToken, refreshToken, profile, cb) => {
+      try {
+        username = profile.email;
+        const result = await db.query("SELECT * FROM users WHERE email = $1", [
+          profile.email,
+        ]);
+        if (result.rows.length === 0) {
+          const newUser = await db.query(
+            "INSERT INTO users (email, password) VALUES ($1, $2)",
+            [profile.email, "google"]
+          );
+          return cb(null, newUser.rows[0]);
+        } else {
+          return cb(null, result.rows[0]);
+        }
+      } catch (err) {
+        return cb(err);
+      }
     }
-    res.redirect("/");
-  });
-});
-
-app.get("/book", async (req,res)=>{
-  title = req.query.title;
-  author = req.query.author;
-  coverId = req.query.coverId;
-  // console.log(title,author,coverId)
-  res.render("addBook.ejs",{
-    key:coverId
-  })
-})
-
-app.post("/add",async (req,res)=>{
-  // console.log(req.body)
-  let result = await db.query(`SELECT * FROM books WHERE key=$1 AND username = $2`,[coverId,username])
-  if(result.rows.length==0){
-    await db.query("INSERT INTO books(key, description, rating,username) VALUES ($1, $2, $3,$4)",[coverId,req.body.description,req.body.rating,username]);
-  }
-  res.redirect("/home")
-})
-
-app.get("/delete",async (req,res)=>{
-  // console.log(req.query)
-  await db.query(`DELETE FROM books WHERE key = $1 AND username = $2`,[req.query.key,username])
-  res.redirect("/home")
-})
-
-//for the feed
-app.get("/feed",async (req,res)=>{
-  
-  let result = await db.query("SELECT key, ROUND(AVG(rating)) AS average_rating FROM books GROUP BY key;")
-    let books = result.rows
-    res.render("feed.ejs",{
-      items:books
-    })
-})
-app.get("/sortFeed", async (req,res)=>{
-  let result
-  switch(req.query.action) {
-    case "button1":
-      result = await db.query("SELECT key, ROUND(AVG(rating)) AS average_rating FROM books GROUP BY key ORDER BY average_rating DESC;")
-      break;
-    case "button2":
-      result = await db.query("SELECT key, ROUND(AVG(rating)) AS average_rating FROM books GROUP BY key ORDER BY average_rating ASC;")
-      break;
-  } 
-  res.render("feed.ejs",{
-    items:result.rows
-  })
-})
-
-
-app.get("/sort", async(req,res)=>{
-  // console.log(req.query)
-  let result
-  switch(req.query.action) {
-    case "button1":
-      result = await db.query("SELECT * from books WHERE username = $1 ORDER BY rating DESC",[username])
-      break;
-    case "button2":
-      result = await db.query("SELECT * from books WHERE username = $1 ORDER BY rating ASC",[username])
-      break;
-    case "button3":
-      result = await db.query("SELECT * from books WHERE username = $1 ORDER BY date DESC",[username])
-      break;
-    case "button4":
-      result = await db.query("SELECT * from books WHERE username = $1 ORDER BY date ASC",[username])
-      break;
-  } 
-  res.render("index.ejs",{
-    items:result.rows
-  })
-})
-
-let url=''
-if(port ==3000){
-  url = "http://localhost:3000/auth/google/home"
-}else{
-  url = "https://library-hr83.onrender.com/auth/google/home"
-}
-
-
-passport.use("google", new GoogleStratergy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: url,
-  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
-},
-async(accessToken, refreshToken,profile,cb)=>{
-try {
-  username=profile.email
-  // console.log(username)
-  const result = await db.query("SELECT * FROM users WHERE email = $1", [
-    profile.email,
-  ]);
-  if (result.rows.length === 0) {
-    const newUser = await db.query(
-      "INSERT INTO users (email, password) VALUES ($1, $2)",
-      [profile.email, "google"]
-    );
-    return cb(null, newUser.rows[0]);
-  } else {
-    return cb(null, result.rows[0]);
-  }
-} catch (err) {
-  return cb(err);
-}
-}
-))
-
-
+  )
+);
 
 passport.serializeUser((user, cb) => {
-cb(null, user);
+  cb(null, user);
 });
 passport.deserializeUser((user, cb) => {
-cb(null, user);
+  cb(null, user);
 });
 
+app.listen(port, () => {
+  console.log(`The app is live on port ${port}`);
+});
 
-app.listen(port,()=>{
-    console.log(`The app is live on port ${port}`)
-})
+export {db,username}
