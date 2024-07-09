@@ -1,5 +1,6 @@
 import express from "express";
 const router = express.Router();
+import { displayName, username } from "../index.js";
 
 let title=''
 let author=''
@@ -10,7 +11,8 @@ router.get("/book", async (req, res) => {
     author = req.query.author;
     coverId = req.query.coverId;
   res.render("addBook.ejs", {
-    key: coverId
+    key: coverId,
+    username:displayName
   });
 });
 

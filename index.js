@@ -18,7 +18,7 @@ import sortFeedRoute from "./routes/sortFeed.js";
 import sortRoute from "./routes/sort.js";
 
 const app = express();
-const port = process.env.port || 4000;
+const port = 3000;
 env.config();
 
 //used postgres on aiven.io
@@ -37,6 +37,7 @@ const db = new pg.Client({
 db.connect();
 
 let username = '';
+let displayName='';
 
 app.use(
   session({
@@ -81,13 +82,19 @@ passport.use(
     async (accessToken, refreshToken, profile, cb) => {
       try {
         username = profile.email;
+        let name = profile.name.givenName
+        if(profile.name.familyName){
+          name+=' '
+          name+=profile.name.familyName
+        }
+        displayName=name
         const result = await db.query("SELECT * FROM users WHERE email = $1", [
           profile.email,
         ]);
         if (result.rows.length === 0) {
           const newUser = await db.query(
-            "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
-            [profile.email, "google"]
+            "INSERT INTO users (email, password, name) VALUES ($1, $2, $3) RETURNING *",
+            [profile.email, "google",name]
           );
           return cb(null, newUser.rows[0]);
         } else {
@@ -111,4 +118,4 @@ app.listen(port, () => {
   console.log(`The app is live on port ${port}`);
 });
 
-export {db,username}
+export {db,username,displayName}

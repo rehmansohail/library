@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import { db } from "../index.js"; // Adjust the import based on your structure
+import { db,displayName, username } from "../index.js"; // Adjust the import based on your structure
 
 router.get("/sortFeed", async (req, res) => {
   let result;
@@ -13,7 +13,8 @@ router.get("/sortFeed", async (req, res) => {
       break;
   }
   res.render("feed.ejs", {
-    items: result.rows
+    items: result.rows,
+    username:displayName
   });
 });
 
