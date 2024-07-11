@@ -17,4 +17,4 @@ router.get("/book", async (req, res) => {
 });
 
 export default router;
-export {coverId}
+export {coverId,title}

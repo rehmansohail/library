@@ -7,6 +7,8 @@ import passport from "passport";
 import session from "express-session";
 import GoogleStrategy from "passport-google-oauth2";
 
+
+
 // Import routes
 import loginRoute from "./routes/login.js";
 import homeRoute from "./routes/home.js";
@@ -16,6 +18,7 @@ import deleteRoute from "./routes/delete.js";
 import feedRoute from "./routes/feed.js";
 import sortFeedRoute from "./routes/sortFeed.js";
 import sortRoute from "./routes/sort.js";
+import aiRoute from "./routes/ai.js"
 
 const app = express();
 const port = 3000;
@@ -62,6 +65,9 @@ app.use("/", deleteRoute);
 app.use("/", feedRoute);
 app.use("/", sortFeedRoute);
 app.use("/", sortRoute);
+app.use("/",aiRoute);
+
+
 
 let url = '';
 if (port == 3000) {

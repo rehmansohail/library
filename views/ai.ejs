@@ -1,0 +1,15 @@
+<%- include("partials/header.ejs") %>
+
+<form class="w-100">
+    <input type="search" id="searchInput" class="form-control" placeholder="Enter the book name" aria-label="Search">
+    <div class="dropdown mt-2">
+      <ul id="dropdownList"></ul>
+    </div>
+  </form>
+
+  <div class="container centered-container">
+    <p class="lead"><%= response %></p>
+  </div>
+
+
+<%- include("partials/footer.ejs") %>
