@@ -5,3 +5,8 @@
     height: 100%;
     text-align: center;
   }
+  .icons{
+    height: 50px;
+    width: 50px;
+    margin: 5px;
+  }

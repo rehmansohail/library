@@ -21,7 +21,7 @@ import sortRoute from "./routes/sort.js";
 import aiRoute from "./routes/ai.js"
 
 const app = express();
-const port = 3000;
+const port = process.env.port || 4000;
 env.config();
 
 //used postgres on aiven.io

@@ -30,6 +30,11 @@
               <div class="card-rating p-2">
                 <p>Rating: <%= item.average_rating %>⭐</p>
               </div>
+              <form action="/book" method="get" class="form-group submit-container p-2">
+                  <input type="hidden" id="title" name="title" value="<%= item.title %>">
+                  <input type="hidden" id="coverId" name="coverId" value="<%= item.key %>">
+                  <button type="submit" class="btn btn-primary">Add this book to your library</button>
+              </form>
             </div>
             <% })}else{ %>
               <h1>No books added yet</h1>

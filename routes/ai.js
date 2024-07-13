@@ -21,7 +21,7 @@ router.get("/ai",async (req,res)=>{
       data: {
         providers: "openai",
         text: query,
-        chatbot_global_action: "Recommend some books based on what are already in my collection",
+        chatbot_global_action: "Recommend some books based on the query and if the query is empty tell the user to add some books",
         previous_history: [],
         temperature: 0.0,
         max_tokens: 150,
